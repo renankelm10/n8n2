@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat com n8n</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #chatBox { margin-top: 20px; }
+    .msg { margin: 5px 0; }
+    .user { color: blue; }
+    .bot { color: green; }
+  </style>
+</head>
+<body>
+  <h2>Chat com n8n (sem API)</h2>
+  <input type="text" id="messageInput" placeholder="Digite sua mensagem..." />
+  <button onclick="enviarMensagem()">Enviar</button>
+
+  <div id="chatBox"></div>
+
+  <script>
+    async function enviarMensagem() {
+      const input = document.getElementById("messageInput");
+      const mensagem = input.value.trim();
+      if (!mensagem) return;
+
+      // Mostrar a mensagem do usuário
+      const chatBox = document.getElementById("chatBox");
+      const msgUser = document.createElement("div");
+      msgUser.className = "msg user";
+      msgUser.textContent = "Você: " + mensagem;
+      chatBox.appendChild(msgUser);
+
+      // Enviar para o webhook do n8n
+      try {
+        const resposta = await fetch("https://SEU-WEBHOOK.n8n.cloud/webhook/teste-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: mensagem })
+        });
+
+        const dados = await resposta.json();
+
+        const msgBot = document.createElement("div");
+        msgBot.className = "msg bot";
+        msgBot.textContent = "Bot: " + dados.resposta;
+        chatBox.appendChild(msgBot);
+      } catch (erro) {
+        alert("Erro ao conectar com o n8n");
+      }
+
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
