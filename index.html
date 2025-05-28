@@ -34,10 +34,13 @@
       // Enviar para o webhook do n8n
       try {
         const resposta = await fetch("http://localhost:5678/webhook-test/949534fe-077e-4fa0-8f1b-027c946b5ca4", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: mensagem })
-        });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    message: mensagem,
+    sessionId: "usuario123" // <- valor fixo ou gerado dinamicamente
+  })
+});
 
         const dados = await resposta.json();
 
