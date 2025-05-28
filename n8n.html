@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <form id="chatForm">
+      <input type="text" id="message" placeholder="Digite sua mensagem" />
+      <button type="submit">Enviar</button>
+    </form>
+
+    <p><strong>Resposta:</strong> <span id="resposta"></span></p>
+
+    <script>
+      document.getElementById("chatForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const msg = document.getElementById("message").value;
+
+        const response = await fetch("https://SEU-WEBHOOK.n8n.cloud/webhook/teste-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        });
+
+        const data = await response.json();
+        document.getElementById("resposta").textContent = data.resposta;
+      });
+    </script>
+  </body>
+</html>
